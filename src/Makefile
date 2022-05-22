@@ -3,11 +3,10 @@ MAKE := $(MAKE) $(if $(filter 1,$(V) $(VERBOSE)),,--no-print-directory)
 
 # This variable will be used only if source files are not hardcoded
 SRCS ?= $(shell find . -name "*.c" | xargs)
-SRCS_SERVER := $(filter server_%,$(SRCS))
-SRCS_CLIENT := $(filter client_%,$(SRCS))
+SRCS_SERVER := $(filter ./server_%,$(SRCS))
+SRCS_CLIENT := $(filter ./client_%,$(SRCS))
 SRCS_LIBFT := $(filter-out $(SRCS_SERVER) $(SRCS_CLIENT),$(SRCS))
 
-NAME := minitalk
 NAME_SERVER := server
 NAME_CLIENT := client
 OTHER_USEFUL_FILES := .editorconfig .gitignore
@@ -19,12 +18,12 @@ TMPS := $(OTHER_USEFUL_FILES)
 
 TMP_DIR := tmp
 
-all: $(NAME) $(OTHER_USEFUL_FILES)
+all: $(NAME_SERVER) $(NAME_CLIENT) $(OTHER_USEFUL_FILES)
 bonus: all
 clean:
 	$Qrm -rf $(OTHER_USEFUL_FILES) tmp
 fclean: clean
-	$Qrm -f $(NAME)
+	$Qrm -f $(NAME_SERVER) $(NAME_CLIENT)
 re:
 	$Q$(MAKE) fclean
 	$Q$(MAKE) all
@@ -68,9 +67,10 @@ $(TMP_DIR)/libft$(SUFFIX).a: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_LIB
 $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_SERVER))
 $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_CLIENT))
 
-.PHONY: $(NAME)
-$(NAME): $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe
+.PHONY: $(NAME_SERVER) $(NAME_CLIENT)
+$(NAME_SERVER): $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe
 	$Qcp $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe $(NAME_SERVER)
+$(NAME_CLIENT): $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe
 	$Qcp $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe $(NAME_CLIENT)
 
 -include $(TMP_DIR)/$(SRCS:.c=$(SUFFIX).d)

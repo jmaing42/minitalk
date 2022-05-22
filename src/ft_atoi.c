@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_io.h                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/21 16:50:32 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 02:30:17 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/03/08 13:34:22 by jmaing            #+#    #+#             */
+/*   Updated: 2022/05/23 02:34:36 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IO_H
-# define FT_IO_H
+#include "ft_lib.h"
 
-# include <stddef.h>
-# include <stdint.h>
+intmax_t	ft_atoi(const char *str)
+{
+	int			sgn;
+	intmax_t	result;
 
-# include "ft_types.h"
-
-t_err	ft_write(int fd, const void *buf, size_t len);
-t_err	ft_put_string(int fd, const char *str);
-t_err	ft_put_number(int fd, intmax_t n);
-
-#endif
+	result = 0;
+	sgn = 1;
+	while (*str == '\t' || *str == '\n' || *str == '\v'
+		|| *str == '\f' || *str == '\r' || *str == ' ')
+		str++;
+	if (*str == '-')
+	{
+		str++;
+		sgn = -1;
+	}
+	else if (*str == '+')
+		str++;
+	while ('0' <= *str && *str <= '9')
+		result = result * 10 + (*str++ - '0') * sgn;
+	return (result);
+}

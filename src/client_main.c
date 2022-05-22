@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_io.h                                            :+:      :+:    :+:   */
+/*   client_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/21 16:50:32 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 02:30:17 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/23 02:47:25 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IO_H
-# define FT_IO_H
+#include "client.h"
 
-# include <stddef.h>
-# include <stdint.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-# include "ft_types.h"
+#include "ft_io.h"
+#include "ft_lib.h"
 
-t_err	ft_write(int fd, const void *buf, size_t len);
-t_err	ft_put_string(int fd, const char *str);
-t_err	ft_put_number(int fd, intmax_t n);
+void	on_success(void)
+{
+	exit(EXIT_SUCCESS);
+}
 
-#endif
+int	main(int argc, char **argv)
+{
+	if (argc != 3)
+	{
+		return (EXIT_FAILURE);
+	}
+	return (send_message(ft_atoi(argv[1]), argv[2]));
+}

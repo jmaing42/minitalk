@@ -8,3 +8,9 @@
 *.exe
 .vscode/*.log
 tmp
+
+# minitalk specific
+src/*
+!src/Makefile
+!src/*.c
+!src/*.h

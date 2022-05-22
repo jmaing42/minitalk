@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_io.h                                            :+:      :+:    :+:   */
+/*   ft_put_number.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/21 16:50:32 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 02:30:17 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/23 02:29:33 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/23 02:31:48 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_IO_H
-# define FT_IO_H
+#include "ft_io.h"
 
-# include <stddef.h>
-# include <stdint.h>
+static t_err	internal(int fd, intmax_t i)
+{
+	int	sgn;
 
-# include "ft_types.h"
+	if (!i)
+		return (0);
+	sgn = 1;
+	if (i < 0)
+		sgn = -1;
+	return (
+		internal(fd, i / 10)
+		|| ft_write(fd, &"0123456789"[(i % 10) * sgn], 1)
+	);
+}
 
-t_err	ft_write(int fd, const void *buf, size_t len);
-t_err	ft_put_string(int fd, const char *str);
-t_err	ft_put_number(int fd, intmax_t n);
-
-#endif
+t_err	ft_put_number(int fd, intmax_t i)
+{
+	if (!i)
+		return (ft_put_string(fd, "0"));
+	if (i < 0 && ft_put_string(fd, "-"))
+		return (true);
+	return (internal(fd, i));
+}
