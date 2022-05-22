@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stringbuilder_append_buffer.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:59:01 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/22 22:21:45 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/23 01:51:34 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,63 @@
 
 #include <stdlib.h>
 
-t_string		*stringbuilder_to_string(t_stringbuilder *self, size_t offset);
-const char		*stringbuilder_to_cstring(t_stringbuilder *self, size_t offset);
+#include "ft_memory.h"
 
-t_err	stringbuilder_append_buffer(
+static t_stringbuilder_node	*alloc(
 	t_stringbuilder *self,
 	size_t length,
 	const char *buffer
 )
 {
-	size_t	remain;
+	t_stringbuilder_node	*node;
+	size_t					size;
 
-	if (self->tail && self->tail->capacity - self->tail->length >= self->length)
+	size = length;
+	if (length < self->buffer_size)
+		size = self->buffer_size;
+	node = (t_stringbuilder_node *)malloc(sizeof(t_stringbuilder_node) + size);
+	if (!node)
+		return (NULL);
+	node->next = NULL;
+	node->capacity = size;
+	ft_memcpy(node->str, buffer, length);
+	node->length = length;
+	if (self->tail)
+		self->tail->next = node;
+	else
+		self->head = node;
+	self->tail = node;
+	return (node);
+}
+
+t_err	stringbuilder_append_buffer(
+	t_stringbuilder *self,
+	size_t len,
+	const char *buffer
+)
+{
+	t_stringbuilder_node *const	tail = self->tail;
+	size_t						offset;
+	t_stringbuilder_node		*new_tail;
+
+	offset = 0;
+	if (self->tail && self->tail->length != self->tail->capacity)
+		offset = self->tail->capacity - self->tail->length;
+	if (offset >= len)
 	{
-		// TODO:
+		ft_memcpy(&self->tail->str[self->tail->length], buffer, len);
+		self->tail->length += len;
+		self->length += len;
+		return (false);
 	}
+	new_tail = alloc(self, len - offset, &buffer[len - offset]);
+	if (!new_tail)
+		return (true);
+	if (offset)
+	{
+		ft_memcpy(&tail->str[tail->length], buffer, offset);
+		tail->length += offset;
+	}
+	self->length += len;
+	return (stringbuilder_append_buffer(self, len - offset, &buffer[offset]));
 }

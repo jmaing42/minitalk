@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stringbuilder_new.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:58 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/22 20:53:13 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/23 01:53:04 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_stringbuilder	*new_stringbuilder(size_t buffer_size)
 
 	if (!result)
 		return (NULL);
-	result->total_length = 0;
+	result->length = 0;
 	result->head = NULL;
 	result->tail = NULL;
 	result->buffer_size = buffer_size;

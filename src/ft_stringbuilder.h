@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stringbuilder.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:58 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/22 21:42:57 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/23 01:22:35 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_stringbuilder_node
 
 typedef struct s_stringbuilder
 {
-	size_t					total_length;
+	size_t					length;
 	t_stringbuilder_node	*head;
 	t_stringbuilder_node	*tail;
 	size_t					buffer_size;
@@ -45,7 +45,7 @@ t_err			stringbuilder_append_c(
 t_err			stringbuilder_append_buffer(
 					t_stringbuilder *self,
 					size_t length,
-					const char *buffer);
+					const char *buf);
 t_err			stringbuilder_append_char(
 					t_stringbuilder *self,
 					char c);
