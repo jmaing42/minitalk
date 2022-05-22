@@ -1,0 +1,10 @@
+# temporary files
+*.o
+*.d
+*.bc
+*.i
+*.s
+*.a
+*.exe
+.vscode/*.log
+tmp

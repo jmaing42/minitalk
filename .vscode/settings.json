@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ft_memory.h": "c",
+        "ft_cstring.h": "c",
+        "ft_string.h": "c",
+        "ft_stringbuilder.h": "c"
+    }
+}
