@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:58 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 01:22:35 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/23 08:36:28 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_err			stringbuilder_append_char(
 t_string		*stringbuilder_to_string(
 					t_stringbuilder *self,
 					size_t offset);
-const char		*stringbuilder_to_cstring(
+char			*stringbuilder_to_cstring(
 					t_stringbuilder *self,
 					size_t offset);
 

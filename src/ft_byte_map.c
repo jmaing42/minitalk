@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   ft_byte_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 02:35:51 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/02 14:54:01 by jmaing            #+#    #+#             */
+/*   Updated: 2022/05/23 08:29:14 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#include "ft_byte_map.h"
 
-# include <unistd.h>
+#include <stddef.h>
+#include <limits.h>
 
-typedef struct s_context
+#include "ft_types.h"
+
+void	ft_byte_map(t_byte *out, bool include_null, const t_byte *set)
 {
-	pid_t		server;
-	const char	*message;
-	size_t		length;
-	size_t		length_length;
-	size_t		sent;
-	int			curr_length;
-}	t_context;
+	size_t			i;
+	const t_byte	*tmp;
 
-#endif
+	i = 0;
+	while (i < 1 << CHAR_BIT)
+		out[i++] = 0;
+	if (include_null)
+		out[0] = 1;
+	if (!set)
+		return ;
+	tmp = (const unsigned char *) set;
+	while (*tmp)
+		out[*tmp++] = 1;
+}

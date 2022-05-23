@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   server_context.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 02:35:51 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/23 07:36:29 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/24 03:19:49 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#include "server.h"
 
-# include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
 
-typedef struct s_context
+#include "ft_exit.h"
+
+t_context	*c(void)
 {
-	pid_t		server;
-	const char	*message;
-	size_t		length;
-	size_t		length_length;
-	size_t		sent;
-	int			curr_length;
-}	t_context;
+	static t_context	context;
 
-#endif
+	return (&context);
+}
+
+void	init_context(t_context *context)
+{
+	context->sessions = new_ft_simple_map_static(sizeof(pid_t));
+	if (!context->sessions)
+		ft_exit(EXIT_FAILURE);
+}

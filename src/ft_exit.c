@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 02:35:51 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/02 14:10:15 by jmaing            #+#    #+#             */
+/*   Updated: 2022/05/23 07:51:42 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#include "ft_exit.h"
 
-# include <unistd.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
-typedef struct s_context
+static void	x(bool execute, void (*cleanup)())
 {
-	pid_t		server;
-	const char	*message;
-	size_t		length;
-	size_t		length_length;
-	size_t		sent;
-	int			curr_length;
-}	t_context;
+	static void	(*cleanup_func)() = NULL;
 
-#endif
+	if (!execute)
+		cleanup_func = cleanup;
+	else if (cleanup_func)
+		cleanup_func();
+}
+
+int	ft_exit(signed char status)
+{
+	x(true, NULL);
+	exit((int) status);
+}
+
+void	ft_set_exit_handler(void (*cleanup)())
+{
+	x(false, cleanup);
+}

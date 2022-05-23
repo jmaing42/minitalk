@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 02:35:51 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/24 03:19:37 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#ifndef SERVER_H
+# define SERVER_H
 
-# include <unistd.h>
+# include <signal.h>
+
+# include "ft_stringbuilder.h"
+# include "ft_simple_map.h"
+
+typedef struct s_session
+{
+	t_stringbuilder	*message;
+	size_t			length;
+	size_t			length_length;
+	char			curr;
+	int				curr_length;
+}	t_session;
 
 typedef struct s_context
 {
-	pid_t		server;
-	const char	*message;
-	size_t		length;
-	size_t		length_length;
-	size_t		sent;
-	int			curr_length;
+	t_ft_simple_map_static	*sessions;
 }	t_context;
+
+t_context	*c(void);
+void		init_context(t_context *context);
+void		handler(int signal, siginfo_t *info, void *context);
 
 #endif

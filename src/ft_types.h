@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_types.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:27:37 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/22 20:27:59 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/23 08:21:01 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdbool.h>
 
-typedef bool	t_err;
+typedef bool			t_err;
+typedef unsigned char	t_byte;
 
 #endif

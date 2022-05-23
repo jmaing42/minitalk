@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 16:50:32 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 02:30:17 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/23 08:17:54 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@
 t_err	ft_write(int fd, const void *buf, size_t len);
 t_err	ft_put_string(int fd, const char *str);
 t_err	ft_put_number(int fd, intmax_t n);
+t_err	ft_put_multiline(int fd, const char *str, const void *prefix, size_t l);
 
 #endif

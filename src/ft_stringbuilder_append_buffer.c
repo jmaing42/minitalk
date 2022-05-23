@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:59:01 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/23 01:51:34 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/24 03:28:33 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_err	stringbuilder_append_buffer(
 	t_stringbuilder_node		*new_tail;
 
 	offset = 0;
-	if (self->tail && self->tail->length != self->tail->capacity)
+	if (self->tail)
 		offset = self->tail->capacity - self->tail->length;
 	if (offset >= len)
 	{
@@ -72,5 +72,5 @@ t_err	stringbuilder_append_buffer(
 		tail->length += offset;
 	}
 	self->length += len;
-	return (stringbuilder_append_buffer(self, len - offset, &buffer[offset]));
+	return (false);
 }

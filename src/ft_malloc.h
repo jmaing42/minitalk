@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.h                                           :+:      :+:    :+:   */
+/*   ft_malloc.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 02:35:51 by Juyeong Maing    ###   ########.fr       */
+/*   Created: 2022/05/18 12:07:06 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/18 12:07:28 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_H
-# define CLIENT_H
+#ifndef FT_MALLOC_H
+# define FT_MALLOC_H
 
-# include <unistd.h>
+# include <stddef.h>
 
-typedef struct s_context
-{
-	pid_t		server;
-	const char	*message;
-	size_t		length;
-	size_t		length_length;
-	size_t		sent;
-	int			curr_length;
-}	t_context;
+void	*ft_malloc(size_t size);
 
 #endif
