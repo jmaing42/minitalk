@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug server",
+      "program": "${workspaceFolder}/src/tmp/server.production.debug.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "postRunCommands": [
+        "pro hand -p true -s false SIGUSR1",
+        "pro hand -p true -s false SIGUSR2",
+      ],
+      "preLaunchTask": "build server (debug)",
+    },
+  ],
+}
