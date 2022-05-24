@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stringbuilder_append_buffer.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:59:01 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/24 03:28:33 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/24 22:40:22 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_err	stringbuilder_append_buffer(
 		self->length += len;
 		return (false);
 	}
-	new_tail = alloc(self, len - offset, &buffer[len - offset]);
+	new_tail = alloc(self, len - offset, &buffer[offset]);
 	if (!new_tail)
 		return (true);
 	if (offset)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 03:10:10 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/24 22:30:42 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	handle_message(bool ack)
 
 	if (ack)
 	{
+		write(2, &"01"[!!(c()->message[c()->sent] & (1 << (CHAR_BIT - 1 - c()->curr_length)))], 1);
 		if (++(c()->curr_length) == CHAR_BIT)
 		{
 			c()->curr_length = 0;
@@ -54,29 +55,26 @@ void	handle(bool ack)
 
 	if (c()->length_length != sizeof(size_t) * CHAR_BIT)
 	{
-		if (!ack)
-		{
-			tmp = SIGUSR1;
-			if (c()->length & (((size_t) 1) << (
-						sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
-				tmp = SIGUSR2;
-			if (kill(c()->server, tmp))
-				exit(EXIT_FAILURE);
-			return ;
-		}
-		if (++(c()->length_length) != sizeof(size_t) * CHAR_BIT)
-			return (handle(false));
-		return (handle_message(false));
+		if (ack)
+			write(2, &"01"[!!(c()->length & (((size_t) 1) << (sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))], 1);
+		if (ack && ++(c()->length_length) == sizeof(size_t) * CHAR_BIT)
+			return (handle_message(false));
+		tmp = SIGUSR1;
+		if (c()->length & (((size_t) 1) << (
+					sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
+			tmp = SIGUSR2;
+		if (kill(c()->server, tmp))
+			exit(EXIT_FAILURE);
 	}
-	return (handle_message(ack));
+	else
+		return (handle_message(ack));
 }
 
 void	handler(int signal, siginfo_t *info, void *context)
 {
-	const pid_t	sender = info->si_pid;
-
+	(void)info;
 	(void)context;
-	if (sender == c()->server && signal == SIGUSR1)
+	if (signal == SIGUSR1)
 		handle(true);
 }
 
@@ -98,10 +96,10 @@ int	main(int argc, char **argv)
 	c()->curr_length = 0;
 	c()->server = ft_atoi(argv[1]);
 	c()->message = argv[2];
+	handle(false);
 	while (true)
 	{
-		handle(false);
-		usleep(10000);
+		pause();
 	}
 	return (EXIT_FAILURE);
 }

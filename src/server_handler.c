@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 03:36:25 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/24 22:31:48 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,11 @@ static void	print_message(pid_t sender, t_stringbuilder *message)
 	free(str);
 }
 
-#include <stdio.h>
-
 void	handle_message(int signal, pid_t sender, t_session *session)
 {
 	session->curr = (session->curr << 1) | (signal == SIGUSR2);
 	if (++(session->curr_length) == CHAR_BIT)
 	{
-		printf("%c (%hhd, %#hhx)\n", session->curr, session->curr, session->curr);
 		if (stringbuilder_append_char(session->message, session->curr))
 			ft_exit(EXIT_FAILURE);
 		session->curr_length = 0;
@@ -76,6 +73,7 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
 			stringbuilder_free(session->message);
 			free(session);
+			(void)kill(sender, SIGUSR1);
 			return ;
 		}
 	}
@@ -87,6 +85,8 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 	}
 }
 
+#include <unistd.h>
+
 void	handler(int signal, siginfo_t *info, void *context)
 {
 	const pid_t			sender = info->si_pid;
@@ -95,6 +95,7 @@ void	handler(int signal, siginfo_t *info, void *context)
 	(void) context;
 	if (!sender)
 		return ;
+	write(2, &"01"[signal == SIGUSR2], 1);
 	if (session->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		session->length_length++;
