@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 22:31:48 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/25 14:01:25 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 	}
 }
 
-#include <unistd.h>
-
 void	handler(int signal, siginfo_t *info, void *context)
 {
 	const pid_t			sender = info->si_pid;
@@ -95,7 +93,6 @@ void	handler(int signal, siginfo_t *info, void *context)
 	(void) context;
 	if (!sender)
 		return ;
-	write(2, &"01"[signal == SIGUSR2], 1);
 	if (session->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		session->length_length++;

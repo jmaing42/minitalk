@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 22:30:42 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/25 14:01:13 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	handle_message(bool ack)
 
 	if (ack)
 	{
-		write(2, &"01"[!!(c()->message[c()->sent] & (1 << (CHAR_BIT - 1 - c()->curr_length)))], 1);
 		if (++(c()->curr_length) == CHAR_BIT)
 		{
 			c()->curr_length = 0;
@@ -55,8 +54,6 @@ void	handle(bool ack)
 
 	if (c()->length_length != sizeof(size_t) * CHAR_BIT)
 	{
-		if (ack)
-			write(2, &"01"[!!(c()->length & (((size_t) 1) << (sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))], 1);
 		if (ack && ++(c()->length_length) == sizeof(size_t) * CHAR_BIT)
 			return (handle_message(false));
 		tmp = SIGUSR1;
@@ -98,8 +95,6 @@ int	main(int argc, char **argv)
 	c()->message = argv[2];
 	handle(false);
 	while (true)
-	{
-		pause();
-	}
+		usleep(100000);
 	return (EXIT_FAILURE);
 }
