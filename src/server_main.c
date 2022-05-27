@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/24 03:19:31 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/27 20:12:16 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,32 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include "ft_exit.h"
 #include "ft_io.h"
 #include "ft_memory.h"
+
+t_context	*c(void)
+{
+	static t_context	context;
+
+	return (&context);
+}
+
+void	server_loop(void)
+{
+	pid_t				client;
+	t_session			*session;
+
+	if (c()->next_client && kill(c()->next_client, c()->next_signal))
+	{
+		if (ft_simple_map_static_pop(c()->sessions, &client, (void **)&session))
+		{
+			stringbuilder_free(session->message);
+			free(session);
+		}
+	}
+	pause();
+}
 
 int	main(void)
 {
@@ -31,10 +55,13 @@ int	main(void)
 	sa.sa_sigaction = handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
-	init_context(c());
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
+	c()->sessions = new_ft_simple_map_static(sizeof(pid_t));
+	if (!c()->sessions)
+		ft_exit(EXIT_FAILURE);
+	c()->next_client = 0;
 	while (true)
-		pause();
+		server_loop();
 	return (EXIT_FAILURE);
 }

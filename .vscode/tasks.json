@@ -10,5 +10,14 @@
       },
       "problemMatcher": ["$gcc"]
     },
+    {
+      "label": "build client (debug)",
+      "type": "shell",
+      "command": "make PROFILE=debug client",
+      "options": {
+        "cwd": "${workspaceFolder}/src",
+      },
+      "problemMatcher": ["$gcc"]
+    },
   ],
 }

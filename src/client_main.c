@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/25 14:01:13 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 19:53:35 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_context	*c(void)
 
 void	handle_message(bool ack)
 {
-	int	tmp;
-
 	if (ack)
 	{
 		if (++(c()->curr_length) == CHAR_BIT)
@@ -41,27 +39,21 @@ void	handle_message(bool ack)
 				exit(EXIT_SUCCESS);
 		}
 	}
-	tmp = SIGUSR1;
+	c()->next_signal = SIGUSR1;
 	if (c()->message[c()->sent] & (1 << (CHAR_BIT - 1 - c()->curr_length)))
-		tmp = SIGUSR2;
-	if (kill(c()->server, tmp))
-		exit(EXIT_FAILURE);
+		c()->next_signal = SIGUSR2;
 }
 
 void	handle(bool ack)
 {
-	int	tmp;
-
 	if (c()->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		if (ack && ++(c()->length_length) == sizeof(size_t) * CHAR_BIT)
 			return (handle_message(false));
-		tmp = SIGUSR1;
+		c()->next_signal = SIGUSR1;
 		if (c()->length & (((size_t) 1) << (
 					sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
-			tmp = SIGUSR2;
-		if (kill(c()->server, tmp))
-			exit(EXIT_FAILURE);
+			c()->next_signal = SIGUSR2;
 	}
 	else
 		return (handle_message(ack));
@@ -95,6 +87,10 @@ int	main(int argc, char **argv)
 	c()->message = argv[2];
 	handle(false);
 	while (true)
-		usleep(100000);
+	{
+		if (kill(c()->server, c()->next_signal))
+			exit(EXIT_FAILURE);
+		pause();
+	}
 	return (EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/25 14:01:25 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 20:09:06 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,8 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			return ;
 		}
 	}
-	if (kill(sender, SIGUSR1))
-	{
-		ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
-		stringbuilder_free(session->message);
-		free(session);
-	}
+	c()->next_client = sender;
+	c()->next_signal = SIGUSR1;
 }
 
 void	handler(int signal, siginfo_t *info, void *context)
@@ -97,9 +93,10 @@ void	handler(int signal, siginfo_t *info, void *context)
 	{
 		session->length_length++;
 		session->length = (session->length << 1) | (signal == SIGUSR2);
-		if (kill(sender, SIGUSR1) || (
-				session->length_length == sizeof(size_t) * CHAR_BIT
-				&& !session->length))
+		c()->next_client = sender;
+		c()->next_signal = SIGUSR1;
+		if (session->length_length == sizeof(size_t) * CHAR_BIT
+			&& !session->length)
 		{
 			ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
 			stringbuilder_free(session->message);

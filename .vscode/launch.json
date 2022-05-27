@@ -14,5 +14,31 @@
       ],
       "preLaunchTask": "build server (debug)",
     },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug client",
+      "program": "${workspaceFolder}/src/tmp/client.production.debug.exe",
+      "args": ["${input:server_pid}", "${input:message}"],
+      "cwd": "${workspaceFolder}",
+      "postRunCommands": [
+        "pro hand -p true -s false SIGUSR1",
+        "pro hand -p true -s false SIGUSR2",
+      ],
+      "preLaunchTask": "build client (debug)",
+    },
+  ],
+  "inputs": [
+    {
+      "id": "server_pid",
+      "type":"promptString",
+      "description": "Server PID",
+    },
+    {
+      "id": "message",
+      "type":"promptString",
+      "description": "Message",
+      "default": "Hello world!",
+    },
   ],
 }
