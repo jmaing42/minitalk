@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 19:41:45 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 21:51:45 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CLIENT_H
 
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_context
 {
@@ -24,6 +25,7 @@ typedef struct s_context
 	size_t		sent;
 	int			curr_length;
 	int			next_signal;
+	bool		ok;
 }	t_context;
 
 #endif

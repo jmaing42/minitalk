@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 20:12:16 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 21:36:47 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ t_context	*c(void)
 
 void	server_loop(void)
 {
-	pid_t				client;
-	t_session			*session;
+	pid_t		client;
+	t_session	*session;
 
+	pause();
 	if (c()->next_client && kill(c()->next_client, c()->next_signal))
 	{
 		if (ft_simple_map_static_pop(c()->sessions, &client, (void **)&session))
@@ -41,7 +42,6 @@ void	server_loop(void)
 			free(session);
 		}
 	}
-	pause();
 }
 
 int	main(void)

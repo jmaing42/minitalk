@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 20:44:21 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 21:47:35 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			return ;
 		}
 	}
-	c()->next_client = sender;
 	c()->next_signal = SIGUSR1;
 }
 

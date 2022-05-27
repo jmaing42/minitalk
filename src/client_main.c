@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 20:45:29 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 21:56:24 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,38 +59,35 @@ void	handle(bool ack)
 		return (handle_message(ack));
 }
 
-void	handler(int signal, siginfo_t *info, void *context)
+void	handler(int signal)
 {
-	(void)info;
-	(void)context;
 	if (signal == SIGUSR1)
+	{
 		handle(true);
+		c()->ok = true;
+	}
 }
 
 int	main(int argc, char **argv)
 {
-	struct sigaction	sa;
-
 	if (argc != 3)
 		return (EXIT_FAILURE);
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_sigaction = handler;
-	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
+	signal(SIGUSR1, handler);
 	c()->length = ft_strlen(argv[2]);
 	c()->length_length = 0;
 	c()->sent = 0;
 	c()->curr_length = 0;
 	c()->server = ft_atoi(argv[1]);
 	c()->message = argv[2];
-	handle(false);
+	c()->ok = false;
 	while (true)
 	{
+		if (!c()->ok)
+			handle(false);
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);
-		usleep(100000);
+		c()->ok = false;
+		usleep(42042);
 	}
 	return (EXIT_FAILURE);
 }
