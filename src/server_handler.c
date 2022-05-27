@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 20:09:06 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 20:44:21 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	print_message(pid_t sender, t_stringbuilder *message)
 		!str
 		|| ft_put_string(1, "Message from ")
 		|| ft_put_number(1, sender)
-		|| ft_put_string(1, ": ")
+		|| ft_put_string(1, ":\n|\t")
 		|| ft_put_multiline(1, str, "|\t", 2)
 		|| ft_put_string(1, "\n")
 	)
@@ -74,6 +74,7 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			stringbuilder_free(session->message);
 			free(session);
 			(void)kill(sender, SIGUSR1);
+			c()->next_client = 0;
 			return ;
 		}
 	}
@@ -83,26 +84,28 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 
 void	handler(int signal, siginfo_t *info, void *context)
 {
-	const pid_t			sender = info->si_pid;
-	t_session *const	session = get_or_new(c()->sessions, sender);
+	t_session	*session;
 
 	(void) context;
-	if (!sender)
+	c()->next_client = info->si_pid;
+	if (!c()->next_client)
 		return ;
+	session = get_or_new(c()->sessions, c()->next_client);
 	if (session->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		session->length_length++;
 		session->length = (session->length << 1) | (signal == SIGUSR2);
-		c()->next_client = sender;
+		c()->next_client = c()->next_client;
 		c()->next_signal = SIGUSR1;
 		if (session->length_length == sizeof(size_t) * CHAR_BIT
 			&& !session->length)
 		{
-			ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
+			ft_simple_map_static_pop(
+				c()->sessions, (void *)&c()->next_client, NULL);
 			stringbuilder_free(session->message);
 			free(session);
 		}
 		return ;
 	}
-	return (handle_message(signal, sender, session));
+	return (handle_message(signal, c()->next_client, session));
 }

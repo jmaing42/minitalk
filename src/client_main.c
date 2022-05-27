@@ -6,7 +6,7 @@
 /*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 19:53:35 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/27 20:45:29 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	main(int argc, char **argv)
 	{
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);
-		pause();
+		usleep(100000);
 	}
 	return (EXIT_FAILURE);
 }
