@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 13:07:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/28 13:49:18 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,7 @@ void	handle(bool ack)
 void	handler(int signal)
 {
 	if (signal == SIGUSR1)
-	{
-		handle(true);
-		c()->ok = true;
-	}
+		c()->ack = true;
 }
 
 int	main(int argc, char **argv)
@@ -81,14 +78,13 @@ int	main(int argc, char **argv)
 	c()->curr_length = 0;
 	c()->server = ft_atoi(argv[1]);
 	c()->message = argv[2];
-	c()->ok = false;
+	c()->ack = false;
 	while (true)
 	{
-		if (!c()->ok)
-			handle(false);
+		handle(c()->ack);
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);
-		c()->ok = false;
+		c()->ack = false;
 		usleep(42042);
 	}
 	return (EXIT_FAILURE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 21:51:45 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/28 13:48:50 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_context
 	size_t		sent;
 	int			curr_length;
 	int			next_signal;
-	bool		ok;
+	bool		ack;
 }	t_context;
 
 #endif
