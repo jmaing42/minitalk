@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 14:23:06 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/28 17:15:16 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,27 @@ void	set_next_signal(bool ack)
 		return (set_next_signal_part2(ack));
 }
 
-void	set_ack_true(int signal)
+void	set_ack_true(int signal, siginfo_t *info, void *context)
 {
+	(void)info;
+	(void)context;
 	if (signal == SIGUSR1)
 		c()->ack = true;
 }
 
 int	main(int argc, char **argv)
 {
+	struct sigaction	sa;
+
 	if (argc != 3)
 		return (EXIT_FAILURE);
-	signal(SIGUSR1, set_ack_true);
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_sigaction = set_ack_true;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGUSR1);
+	sigaddset(&sa.sa_mask, SIGUSR2);
+	sigaction(SIGUSR1, &sa, NULL);
 	c()->length = ft_strlen(argv[2]);
 	c()->length_length = 0;
 	c()->sent = 0;
@@ -81,6 +91,8 @@ int	main(int argc, char **argv)
 	c()->ack = false;
 	while (true)
 	{
+		if (!c()->ack)
+			ft_put_string(STDERR_FILENO, "No ACK;\n");
 		set_next_signal(c()->ack);
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);

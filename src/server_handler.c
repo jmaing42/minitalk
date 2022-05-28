@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
+/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 14:23:32 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/28 17:01:19 by jmaing           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	print_message(pid_t sender, t_stringbuilder *message)
 		|| ft_put_number(STDOUT_FILENO, message->length)
 		|| ft_put_string(STDOUT_FILENO, " bytes)\n|\t")
 		|| ft_put_multiline(STDOUT_FILENO, str, "|\t", 2)
-		|| ft_put_string(STDOUT_FILENO, "\n")
+		|| ft_put_string(STDOUT_FILENO, "\n\n")
 	)
 		ft_exit(EXIT_FAILURE);
 	free(str);
