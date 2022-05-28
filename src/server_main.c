@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 21:36:47 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/28 14:03:27 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	server_loop(void)
 	pause();
 	if (c()->next_client && kill(c()->next_client, c()->next_signal))
 	{
-		if (ft_simple_map_static_pop(c()->sessions, &client, (void **)&session))
+		if (!ft_simple_map_static_pop(
+				c()->sessions, &client, (void **)&session))
 		{
 			stringbuilder_free(session->message);
 			free(session);
