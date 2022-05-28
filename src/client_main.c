@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 21:56:24 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/28 13:07:29 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	handle(bool ack)
 					sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
 			c()->next_signal = SIGUSR2;
 	}
+	else if (!c()->length)
+		exit(EXIT_SUCCESS);
 	else
 		return (handle_message(ack));
 }
