@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 14:04:25 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/28 14:23:32 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include <unistd.h>
 #include <signal.h>
 
 #include "ft_memory.h"
@@ -48,13 +49,13 @@ static void	print_message(pid_t sender, t_stringbuilder *message)
 
 	if (
 		!str
-		|| ft_put_string(1, "Message from ")
-		|| ft_put_number(1, sender)
-		|| ft_put_string(1, " (")
-		|| ft_put_number(1, message->length)
-		|| ft_put_string(1, " bytes)\n|\t")
-		|| ft_put_multiline(1, str, "|\t", 2)
-		|| ft_put_string(1, "\n")
+		|| ft_put_string(STDOUT_FILENO, "Message from ")
+		|| ft_put_number(STDOUT_FILENO, sender)
+		|| ft_put_string(STDOUT_FILENO, " (")
+		|| ft_put_number(STDOUT_FILENO, message->length)
+		|| ft_put_string(STDOUT_FILENO, " bytes)\n|\t")
+		|| ft_put_multiline(STDOUT_FILENO, str, "|\t", 2)
+		|| ft_put_string(STDOUT_FILENO, "\n")
 	)
 		ft_exit(EXIT_FAILURE);
 	free(str);

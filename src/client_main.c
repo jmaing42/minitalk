@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 13:49:18 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/28 14:23:06 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_context	*c(void)
 	return (&context);
 }
 
-void	handle_message(bool ack)
+void	set_next_signal_part2(bool ack)
 {
 	if (ack)
 	{
@@ -44,12 +44,12 @@ void	handle_message(bool ack)
 		c()->next_signal = SIGUSR2;
 }
 
-void	handle(bool ack)
+void	set_next_signal(bool ack)
 {
 	if (c()->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		if (ack && ++(c()->length_length) == sizeof(size_t) * CHAR_BIT)
-			return (handle_message(false));
+			return (set_next_signal_part2(false));
 		c()->next_signal = SIGUSR1;
 		if (c()->length & (((size_t) 1) << (
 					sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
@@ -58,10 +58,10 @@ void	handle(bool ack)
 	else if (!c()->length)
 		exit(EXIT_SUCCESS);
 	else
-		return (handle_message(ack));
+		return (set_next_signal_part2(ack));
 }
 
-void	handler(int signal)
+void	set_ack_true(int signal)
 {
 	if (signal == SIGUSR1)
 		c()->ack = true;
@@ -71,7 +71,7 @@ int	main(int argc, char **argv)
 {
 	if (argc != 3)
 		return (EXIT_FAILURE);
-	signal(SIGUSR1, handler);
+	signal(SIGUSR1, set_ack_true);
 	c()->length = ft_strlen(argv[2]);
 	c()->length_length = 0;
 	c()->sent = 0;
@@ -81,7 +81,7 @@ int	main(int argc, char **argv)
 	c()->ack = false;
 	while (true)
 	{
-		handle(c()->ack);
+		set_next_signal(c()->ack);
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);
 		c()->ack = false;
