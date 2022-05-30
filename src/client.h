@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 13:48:50 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/30 17:25:27 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ typedef struct s_context
 	size_t		length_length;
 	size_t		sent;
 	int			curr_length;
-	int			next_signal;
-	bool		ack;
 }	t_context;
+
+bool	handler(t_context *context, bool ack);
 
 #endif
