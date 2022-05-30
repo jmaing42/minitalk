@@ -13,7 +13,7 @@ OTHER_USEFUL_FILES := .editorconfig .gitignore
 
 CC := clang
 AR := ar
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -pedantic
 TMPS := $(OTHER_USEFUL_FILES)
 
 TMP_DIR := tmp

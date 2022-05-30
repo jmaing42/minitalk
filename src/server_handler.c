@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/30 15:16:03 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/30 15:48:00 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ static void	print_message(pid_t sender, t_stringbuilder *message)
 	free(str);
 }
 
+#include <stdio.h>
+#include <stdint.h>
+#include <inttypes.h>
+
 void	handle_message(int signal, pid_t sender, t_session *session)
 {
 	session->curr = (session->curr << 1) | (signal == SIGUSR2);
@@ -77,10 +81,12 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 				c()->sessions, (void *)&sender, NULL);
 			stringbuilder_free(session->message);
 			free(session);
+			fprintf(stderr, "killing...\n");
 			(void)kill(sender, SIGUSR1);
 			return ;
 		}
 	}
+	fprintf(stderr, "killing...\n");
 	if (kill(sender, SIGUSR1))
 	{
 		(void)ft_simple_map_static_pop(
@@ -98,10 +104,15 @@ void	handler(int signal, siginfo_t *info, void *context)
 	(void) context;
 	if (!sender)
 		return ;
+	fprintf(stderr, "Signal received from %" PRIuMAX " ... (data: %5s) (size: %zu/%zu) + (%zu + (%d/%d) / %zu)\n", (intmax_t)sender, signal == SIGUSR2 ? "true" : "false", session->length_length, sizeof(size_t) * CHAR_BIT, session->message->length, session->curr_length, CHAR_BIT, session->length);
 	if (session->length_length == sizeof(size_t) * CHAR_BIT)
-		return (handle_message(signal, sender, session));
+	{
+		handle_message(signal, sender, session);
+		return ;
+	}
 	session->length_length++;
 	session->length = (session->length << 1) | (signal == SIGUSR2);
+	fprintf(stderr, "killing...\n");
 	if (kill(sender, SIGUSR1) || (!session->length
 			&& session->length_length == sizeof(size_t) * CHAR_BIT))
 	{

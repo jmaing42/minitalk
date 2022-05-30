@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/30 15:23:28 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/30 15:52:36 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	set_next_signal(bool ack)
 	if (c()->length_length != sizeof(size_t) * CHAR_BIT)
 	{
 		if (ack && ++(c()->length_length) == sizeof(size_t) * CHAR_BIT)
-			return (set_next_signal_part2(false));
+		{
+			set_next_signal_part2(false);
+			return ;
+		}
 		c()->next_signal = SIGUSR1;
 		if (c()->length & (((size_t) 1) << (
 					sizeof(size_t) * CHAR_BIT - 1 - c()->length_length)))
@@ -57,7 +60,7 @@ void	set_next_signal(bool ack)
 	else if (!c()->length)
 		exit(EXIT_SUCCESS);
 	else
-		return (set_next_signal_part2(ack));
+		set_next_signal_part2(ack);
 }
 
 void	set_ack_true(int signal, siginfo_t *info, void *context)
@@ -67,6 +70,8 @@ void	set_ack_true(int signal, siginfo_t *info, void *context)
 	if (signal == SIGUSR1)
 		c()->ack = true;
 }
+
+#include <stdio.h>
 
 int	main(int argc, char **argv)
 {
@@ -88,13 +93,12 @@ int	main(int argc, char **argv)
 	c()->ack = false;
 	while (true)
 	{
-		if (!c()->ack)
-			ft_put_string(STDERR_FILENO, "No ACK;\n");
+		fprintf(stderr, "Sending... (data: %5s) (size: %zu/%zu) + (%zu + (%d/%d) / %zu)%s\n", c()->next_signal == SIGUSR2 ? "true" : "false", c()->length_length, sizeof(size_t) * CHAR_BIT, c()->sent, c()->curr_length, CHAR_BIT, c()->length, c()->ack ? "" : " - NO ACK!!!");
 		set_next_signal(c()->ack);
 		if (kill(c()->server, c()->next_signal))
 			exit(EXIT_FAILURE);
 		c()->ack = false;
-		usleep(42042);
+		usleep(100000);
 	}
 	return (EXIT_FAILURE);
 }
