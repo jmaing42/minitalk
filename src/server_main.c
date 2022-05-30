@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 17:13:50 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:16:28 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,6 @@ t_context	*c(void)
 	return (&context);
 }
 
-void	server_loop(void)
-{
-	pid_t		client;
-	t_session	*session;
-
-	pause();
-	if (c()->next_client && kill(c()->next_client, c()->next_signal))
-	{
-		if (!ft_simple_map_static_pop(
-				c()->sessions, &client, (void **)&session))
-		{
-			stringbuilder_free(session->message);
-			free(session);
-		}
-	}
-}
-
 int	main(void)
 {
 	struct sigaction	sa;
@@ -63,8 +46,7 @@ int	main(void)
 	c()->sessions = new_ft_simple_map_static(sizeof(pid_t));
 	if (!c()->sessions)
 		ft_exit(EXIT_FAILURE);
-	c()->next_client = 0;
 	while (true)
-		server_loop();
+		pause();
 	return (EXIT_FAILURE);
 }

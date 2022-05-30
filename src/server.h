@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/27 19:53:15 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:03:49 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ typedef struct s_session
 typedef struct s_context
 {
 	t_ft_simple_map_static	*sessions;
-	pid_t					next_client;
-	int						next_signal;
 }	t_context;
 
 t_context	*c(void);

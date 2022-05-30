@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 17:01:19 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:16:03 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,36 +78,38 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			stringbuilder_free(session->message);
 			free(session);
 			(void)kill(sender, SIGUSR1);
-			c()->next_client = 0;
 			return ;
 		}
 	}
-	c()->next_signal = SIGUSR1;
+	if (kill(sender, SIGUSR1))
+	{
+		(void)ft_simple_map_static_pop(
+			c()->sessions, &sender, (void **)&session);
+		stringbuilder_free(session->message);
+		free(session);
+	}
 }
 
 void	handler(int signal, siginfo_t *info, void *context)
 {
-	t_session	*session;
+	const pid_t			sender = info->si_pid;
+	t_session *const	session = get_or_new(c()->sessions, sender);
 
 	(void) context;
-	c()->next_client = info->si_pid;
-	if (!c()->next_client)
+	if (!sender)
 		return ;
-	session = get_or_new(c()->sessions, c()->next_client);
 	if (session->length_length == sizeof(size_t) * CHAR_BIT)
-		return (handle_message(signal, c()->next_client, session));
+		return (handle_message(signal, sender, session));
 	session->length_length++;
 	session->length = (session->length << 1) | (signal == SIGUSR2);
-	c()->next_signal = SIGUSR1;
-	if (session->length_length == sizeof(size_t) * CHAR_BIT
-		&& !session->length)
+	if (kill(sender, SIGUSR1) || (!session->length
+			&& session->length_length == sizeof(size_t) * CHAR_BIT))
 	{
-		print_message(c()->next_client, session->message);
-		(void)ft_simple_map_static_pop(
-			c()->sessions, (void *)&c()->next_client, NULL);
+		if (!session->length
+			&& session->length_length == sizeof(size_t) * CHAR_BIT)
+			print_message(sender, session->message);
+		(void)ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
 		stringbuilder_free(session->message);
 		free(session);
-		(void)kill(c()->next_client, SIGUSR1);
-		c()->next_client = 0;
 	}
 }

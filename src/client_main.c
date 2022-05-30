@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/28 17:15:16 by jmaing           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:23:28 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 #include "ft_io.h"
 #include "ft_lib.h"
-#include "ft_memory.h"
 #include "ft_cstring.h"
 
 t_context	*c(void)
@@ -75,12 +74,10 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 		return (EXIT_FAILURE);
-	ft_bzero(&sa, sizeof(sa));
 	sa.sa_sigaction = set_ack_true;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &sa, NULL);
 	c()->length = ft_strlen(argv[2]);
 	c()->length_length = 0;
