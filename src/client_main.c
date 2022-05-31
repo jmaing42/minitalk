@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:26:12 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 16:36:14 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,15 @@ static void	init_context(t_context *context, const char *pid, const char *str)
 	context->message = str;
 }
 
-static void	set_ack_true(int signal, siginfo_t *info, void *context)
+static void	set_ack_true(int signal)
 {
-	(void)info;
-	(void)context;
 	if (signal == SIGUSR1)
 		g_ack = 1;
 }
 
 static void	set_signal_handler(void)
 {
-	struct sigaction	sa;
-
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_sigaction = set_ack_true;
-	sa.sa_flags = SA_SIGINFO;
-	if (
-		sigemptyset(&sa.sa_mask)
-		|| sigaddset(&sa.sa_mask, SIGUSR1)
-		|| sigaction(SIGUSR1, &sa, NULL)
-	)
-		exit(EXIT_FAILURE);
+	signal(SIGUSR1, set_ack_true);
 }
 
 int	main(int argc, char **argv)

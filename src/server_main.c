@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:27:56 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 16:36:31 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ static void	set_signal_handler(void)
 	sa.sa_flags = SA_SIGINFO;
 	if (
 		sigemptyset(&sa.sa_mask)
-		|| sigaddset(&sa.sa_mask, SIGUSR1)
-		|| sigaddset(&sa.sa_mask, SIGUSR2)
 		|| sigaction(SIGUSR1, &sa, NULL)
 		|| sigaction(SIGUSR2, &sa, NULL)
 	)
