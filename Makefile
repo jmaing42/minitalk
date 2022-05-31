@@ -7,7 +7,8 @@ clean:
 	$Q$(MAKE) -C src clean
 	$Q$(MAKE) -C test clean
 	@printf "\033[0m"
-fclean: clean
+fclean:
+	$Qrm -rf ./tmp
 	$Q$(MAKE) -C src fclean
 	$Q$(MAKE) -C test fclean
 	@printf "\033[0m"
