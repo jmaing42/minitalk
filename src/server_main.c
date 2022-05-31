@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:36:31 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 03:35:01 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
 
 #include "ft_exit.h"
 #include "ft_io.h"
@@ -33,6 +31,10 @@ static void	init_context(void)
 	c()->sessions = new_ft_simple_map_static(sizeof(pid_t));
 	if (!c()->sessions)
 		ft_exit(EXIT_FAILURE);
+	c()->timeout = 60000;
+	c()->head = NULL;
+	c()->tail = NULL;
+	c()->busy = false;
 }
 
 static void	set_signal_handler(void)
@@ -53,7 +55,17 @@ static void	set_signal_handler(void)
 static void	main_loop(void)
 {
 	while (true)
-		pause();
+	{
+		c()->woke_up = false;
+		if (c()->head)
+		{
+			usleep(c()->timeout);
+			if (!c()->woke_up)
+				handle_timeout();
+		}
+		else
+			pause();
+	}
 }
 
 int	main(void)

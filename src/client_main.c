@@ -6,14 +6,13 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 02:17:12 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 02:48:38 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
 #include <stdlib.h>
-#include <unistd.h>
 #include <signal.h>
 
 #include "ft_io.h"
