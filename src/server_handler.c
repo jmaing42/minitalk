@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:51:00 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 01:22:41 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ static bool	handle_length(t_session *session, pid_t sender, bool data)
 	session->length_length++;
 	session->length = (session->length << 1) | data;
 	if (session->length_length == sizeof(size_t) * CHAR_BIT)
-		session->message = (char *)ft_malloc(session->length);
+	{
+		session->message = (char *)ft_malloc(session->length + 1);
+		session->message[session->length] = '\0';
+	}
 	if (kill(sender, SIGUSR1) || ((!session->length || !session->message)
 			&& session->length_length == sizeof(size_t) * CHAR_BIT))
 	{
