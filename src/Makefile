@@ -12,8 +12,9 @@ NAME_CLIENT := client
 OTHER_USEFUL_FILES := .editorconfig .gitignore
 
 CC := clang
+CCLD := clang
 AR := ar
-CFLAGS := -Wall -Wextra -Werror -pedantic
+CFLAGS := -Wall -Wextra -Werror
 TMPS := $(OTHER_USEFUL_FILES)
 
 TMP_DIR := tmp
@@ -34,6 +35,13 @@ re:
 .gitignore:
 	$Qprintf ".*\ntmp\n" > .gitignore
 
+ifeq ($(MOULINETTE_MODE),1)
+
+CC := cc
+CCLD := cc
+
+else
+
 PROFILE ?= release
 ifeq ($(PROFILE),release)
 CFLAGS += -O3 -DNDEBUG
@@ -53,15 +61,21 @@ $(error Bad target)
 endif
 
 SUFFIX := .$(TARGET).$(PROFILE)$(if $(SANITIZER),.$(SANITIZER))
+CFLAGS += $(if $(SANITIZER),-fsanitize=$(SANITIZER),) -std=c99 -pedantic -MMD
+LDFLAGS += $(if $(SANITIZER),-fsanitize=$(SANITIZER),)
+
+-include $(TMP_DIR)/$(SRCS:.c=$(SUFFIX).d)
+
+endif
 
 $(TMP_DIR)/%.a:
 	$Qmkdir -p $(@D)
 	$Q$(AR) rcs $@ $^
 $(TMP_DIR)/%$(SUFFIX).o: %.c
 	$Qmkdir -p $(@D)
-	$Q$(CC) $(CFLAGS) -MMD $(if $(SANITIZER),-fsanitize=$(SANITIZER),) -o $@ -c $<
+	$Q$(CC) $(CFLAGS) -o $@ -c $<
 $(TMP_DIR)/%$(SUFFIX).exe: $(TMP_DIR)/libft$(SUFFIX).a
-	$Q$(CC) $(LDFLAGS) $(if $(SANITIZER),-fsanitize=$(SANITIZER),) -o $@ $^
+	$Q$(CCLD) $(LDFLAGS) -o $@ $^
 
 $(TMP_DIR)/libft$(SUFFIX).a: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_LIBFT))
 $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe: $(patsubst ./%.c,$(TMP_DIR)/%$(SUFFIX).o,$(SRCS_SERVER))
@@ -72,5 +86,3 @@ $(NAME_SERVER): $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe
 	$Qcp $(TMP_DIR)/$(NAME_SERVER)$(SUFFIX).exe $(NAME_SERVER)
 $(NAME_CLIENT): $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe
 	$Qcp $(TMP_DIR)/$(NAME_CLIENT)$(SUFFIX).exe $(NAME_CLIENT)
-
--include $(TMP_DIR)/$(SRCS:.c=$(SUFFIX).d)
