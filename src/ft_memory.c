@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memory.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaing <jmaing@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/22 08:09:51 by jmaing            #+#    #+#             */
-/*   Updated: 2022/05/22 20:39:51 by jmaing           ###   ########.fr       */
+/*   Created: 2022/04/22 08:09:51 by Juyeong Maing     #+#    #+#             */
+/*   Updated: 2022/05/31 16:39:50 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
