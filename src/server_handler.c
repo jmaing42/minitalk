@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/30 17:26:36 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 16:34:34 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include "ft_malloc.h"
 #include "ft_exit.h"
 #include "ft_simple_map.h"
-#include "ft_stringbuilder.h"
 #include "ft_io.h"
 
 static t_session	*get_or_new(t_ft_simple_map_static *map, pid_t key)
@@ -31,9 +30,8 @@ static t_session	*get_or_new(t_ft_simple_map_static *map, pid_t key)
 	if (!ft_simple_map_static_get(map, &key, (void **)&session))
 		return (session);
 	session = (t_session *)ft_malloc(sizeof(t_session));
-	session->message = new_stringbuilder(1024);
-	if (!session->message)
-		ft_exit(EXIT_FAILURE);
+	session->message = NULL;
+	session->received = 0;
 	session->length = 0;
 	session->length_length = 0;
 	session->curr = 0;
@@ -43,22 +41,18 @@ static t_session	*get_or_new(t_ft_simple_map_static *map, pid_t key)
 	return (session);
 }
 
-static void	print_message(pid_t sender, t_stringbuilder *message)
+static void	print_message(pid_t sender, const char *message, size_t length)
 {
-	char *const	str = stringbuilder_to_cstring(message, 0);
-
 	if (
-		!str
-		|| ft_put_string(STDOUT_FILENO, "Message from ")
+		ft_put_string(STDOUT_FILENO, "Message from ")
 		|| ft_put_number(STDOUT_FILENO, sender)
 		|| ft_put_string(STDOUT_FILENO, " (")
-		|| ft_put_number(STDOUT_FILENO, message->length)
+		|| ft_put_number(STDOUT_FILENO, length)
 		|| ft_put_string(STDOUT_FILENO, " bytes)\n|\t")
-		|| ft_put_multiline(STDOUT_FILENO, str, "|\t", 2)
+		|| ft_put_multiline(STDOUT_FILENO, message, "|\t", 2)
 		|| ft_put_string(STDOUT_FILENO, "\n\n")
 	)
 		ft_exit(EXIT_FAILURE);
-	free(str);
 }
 
 void	handle_message(int signal, pid_t sender, t_session *session)
@@ -66,16 +60,15 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 	session->curr = (session->curr << 1) | (signal == SIGUSR2);
 	if (++(session->curr_length) == CHAR_BIT)
 	{
-		if (stringbuilder_append_char(session->message, session->curr))
-			ft_exit(EXIT_FAILURE);
+		session->message[session->received++] = session->curr;
 		session->curr_length = 0;
 		session->curr = 0;
-		if (session->message->length == session->length)
+		if (session->received == session->length)
 		{
-			print_message(sender, session->message);
+			print_message(sender, session->message, session->length);
 			(void)ft_simple_map_static_pop(
 				c()->sessions, (void *)&sender, NULL);
-			stringbuilder_free(session->message);
+			free(session->message);
 			free(session);
 			(void)kill(sender, SIGUSR1);
 			return ;
@@ -85,7 +78,7 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 	{
 		(void)ft_simple_map_static_pop(
 			c()->sessions, &sender, (void **)&session);
-		stringbuilder_free(session->message);
+		free(session->message);
 		free(session);
 	}
 }
@@ -105,14 +98,16 @@ void	handler(int signal, siginfo_t *info, void *context)
 	}
 	session->length_length++;
 	session->length = (session->length << 1) | (signal == SIGUSR2);
-	if (kill(sender, SIGUSR1) || (!session->length
+	if (session->length_length == sizeof(size_t) * CHAR_BIT)
+		session->message = (char *)ft_malloc(session->length);
+	if (kill(sender, SIGUSR1) || ((!session->length || !session->message)
 			&& session->length_length == sizeof(size_t) * CHAR_BIT))
 	{
 		if (!session->length
 			&& session->length_length == sizeof(size_t) * CHAR_BIT)
-			print_message(sender, session->message);
+			print_message(sender, session->message, session->length);
 		(void)ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
-		stringbuilder_free(session->message);
+		free(session->message);
 		free(session);
 	}
 }

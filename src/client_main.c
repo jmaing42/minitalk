@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/30 17:29:42 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 16:26:12 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 #include "ft_io.h"
 #include "ft_lib.h"
+#include "ft_memory.h"
 #include "ft_cstring.h"
 
 static sig_atomic_t	g_ack;
@@ -46,6 +47,7 @@ static void	set_signal_handler(void)
 {
 	struct sigaction	sa;
 
+	ft_bzero(&sa, sizeof(sa));
 	sa.sa_sigaction = set_ack_true;
 	sa.sa_flags = SA_SIGINFO;
 	if (
@@ -58,8 +60,8 @@ static void	set_signal_handler(void)
 
 int	main(int argc, char **argv)
 {
-	t_context			context;
-	int					signal;
+	t_context	context;
+	int			signal;
 
 	if (argc != 3)
 		return (EXIT_FAILURE);
