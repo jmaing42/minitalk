@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:22:31 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:36:14 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 02:17:12 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include "ft_lib.h"
 #include "ft_memory.h"
 #include "ft_cstring.h"
+
+#define ENVP_TIMEOUT_START "TIMEOUT="
+#define DEFAULT_TIMEOUT 42042
 
 static sig_atomic_t	g_ack;
 
@@ -46,10 +49,20 @@ static void	set_signal_handler(void)
 	signal(SIGUSR1, set_ack_true);
 }
 
-int	main(int argc, char **argv)
+static useconds_t	parse_timeout(char **environ)
 {
-	t_context	context;
-	int			signal;
+	environ--;
+	while (*++environ)
+		if (ft_cstring_starts_with(*environ, ENVP_TIMEOUT_START))
+			return (ft_atoi(*environ + sizeof(ENVP_TIMEOUT_START) - 1));
+	return (DEFAULT_TIMEOUT);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	const useconds_t	timeout = parse_timeout(envp);
+	t_context			context;
+	int					signal;
 
 	if (argc != 3)
 		return (EXIT_FAILURE);
@@ -64,7 +77,7 @@ int	main(int argc, char **argv)
 		g_ack = 0;
 		if (kill(context.server, signal))
 			exit(EXIT_FAILURE);
-		usleep(42042);
+		usleep(timeout);
 	}
 	return (EXIT_FAILURE);
 }

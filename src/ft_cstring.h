@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 05:28:39 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:39:50 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 02:08:55 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,7 @@ size_t	ft_strchp(const char *str, char ch);
 size_t	ft_strrchp(const char *str, char ch);
 size_t	ft_strnchp(const char *str, size_t max_len, char ch);
 size_t	ft_strnrchp(const char *str, size_t max_len, char ch);
+
+bool	ft_cstring_starts_with(const char *str, const char *starts_with);
 
 #endif
