@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:34:34 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 16:51:00 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,30 @@ static void	print_message(pid_t sender, const char *message, size_t length)
 		ft_exit(EXIT_FAILURE);
 }
 
-void	handle_message(int signal, pid_t sender, t_session *session)
+static bool	handle_length(t_session *session, pid_t sender, bool data)
 {
-	session->curr = (session->curr << 1) | (signal == SIGUSR2);
+	if (session->length_length == sizeof(size_t) * CHAR_BIT)
+		return (false);
+	session->length_length++;
+	session->length = (session->length << 1) | data;
+	if (session->length_length == sizeof(size_t) * CHAR_BIT)
+		session->message = (char *)ft_malloc(session->length);
+	if (kill(sender, SIGUSR1) || ((!session->length || !session->message)
+			&& session->length_length == sizeof(size_t) * CHAR_BIT))
+	{
+		if (!session->length
+			&& session->length_length == sizeof(size_t) * CHAR_BIT)
+			print_message(sender, session->message, session->length);
+		(void)ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
+		free(session->message);
+		free(session);
+	}
+	return (true);
+}
+
+static bool	handle_message(t_session *session, pid_t sender, bool data)
+{
+	session->curr = (session->curr << 1) | data;
 	if (++(session->curr_length) == CHAR_BIT)
 	{
 		session->message[session->received++] = session->curr;
@@ -71,7 +92,7 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 			free(session->message);
 			free(session);
 			(void)kill(sender, SIGUSR1);
-			return ;
+			return (true);
 		}
 	}
 	if (kill(sender, SIGUSR1))
@@ -81,6 +102,7 @@ void	handle_message(int signal, pid_t sender, t_session *session)
 		free(session->message);
 		free(session);
 	}
+	return (true);
 }
 
 void	handler(int signal, siginfo_t *info, void *context)
@@ -91,21 +113,14 @@ void	handler(int signal, siginfo_t *info, void *context)
 	(void) context;
 	if (!sender)
 		return ;
-	if (session->length_length == sizeof(size_t) * CHAR_BIT)
+	if (
+		!(
+			handle_length(session, sender, signal == SIGUSR2)
+			|| handle_message(session, sender, signal == SIGUSR2)
+		)
+	)
 	{
-		handle_message(signal, sender, session);
-		return ;
-	}
-	session->length_length++;
-	session->length = (session->length << 1) | (signal == SIGUSR2);
-	if (session->length_length == sizeof(size_t) * CHAR_BIT)
-		session->message = (char *)ft_malloc(session->length);
-	if (kill(sender, SIGUSR1) || ((!session->length || !session->message)
-			&& session->length_length == sizeof(size_t) * CHAR_BIT))
-	{
-		if (!session->length
-			&& session->length_length == sizeof(size_t) * CHAR_BIT)
-			print_message(sender, session->message, session->length);
+		(void)kill(sender, SIGUSR2);
 		(void)ft_simple_map_static_pop(c()->sessions, (void *)&sender, NULL);
 		free(session->message);
 		free(session);
