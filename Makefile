@@ -31,11 +31,11 @@ ifndef GIT_REMOTE_URL
 endif
 	$Qrm -rf tmp
 	$Qcp -r ./src ./tmp
-	$Q$(MAKE) -C tmp re
+	$Q$(MAKE) -C tmp fclean
+	$Q(cd tmp && mkdir tmp && find . -maxdepth 1 -name "*.c" | sed "s#\\./##" | sed "s#\\.c\$$##" | xargs -I {} clang -Wall -Wextra -Werror -std=c99 -pedantic -MMD -c -o tmp/{}.o {}.c)
 	$Qprintf "# enable additional moulinette-specific trashy rules\nMOULINETTE_MODE := 1\n# script-generated file list for norm\nSRCS := %s\n\n" "$$(cd src && find . -maxdepth 1 -name "*.c" | xargs)" | cat - src/Makefile > tmp/Makefile.tmp
 	$Qfind tmp -name "*.d" | xargs | xargs cat tmp/Makefile.tmp > tmp/Makefile
-	$Qrm tmp/Makefile.tmp
-	$Q$(MAKE) -C tmp fclean
+	$Qrm -rf tmp/tmp tmp/Makefile.tmp
 	$Q(cd tmp && git init && git add . && git commit -m "Initial commit" && git push "$(GIT_REMOTE_URL)" HEAD:master) || (echo "Failed to publish" && false)
 	$Qrm -rf tmp
 	$Qgit push "$(GIT_REMOTE_URL)" HEAD:source || echo "Failed to push HEAD to source"
