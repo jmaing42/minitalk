@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 03:50:19 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 04:16:02 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_session
 	size_t					received;
 	char					*message;
 	char					curr;
-	uint_least8_t			curr_length;
+	uint_fast8_t			curr_length;
 	t_session_timeout_node	timeout_node;
 }	t_session;
 
