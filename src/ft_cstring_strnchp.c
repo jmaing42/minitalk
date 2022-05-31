@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 13:25:46 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:39:50 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/05/31 20:42:12 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ size_t	ft_strnchp(const char *str, size_t max_len, char ch)
 
 	if (!str)
 	{
-		ft_puts(STDERR_FILENO, "ft_strnchp(): wrong parameter given\n", NULL);
+		ft_put_string(
+			STDERR_FILENO,
+			"ft_strnchp(): wrong parameter given\n");
 		ft_exit(EXIT_FAILURE);
 		return (0);
 	}
@@ -44,7 +46,9 @@ size_t	ft_strnrchp(const char *str, size_t max_len, char ch)
 
 	if (!str)
 	{
-		ft_puts(STDERR_FILENO, "ft_strnrchp(): wrong parameter given\n", NULL);
+		ft_put_string(
+			STDERR_FILENO,
+			"ft_strnrchp(): wrong parameter given\n");
 		ft_exit(EXIT_FAILURE);
 		return (0);
 	}
