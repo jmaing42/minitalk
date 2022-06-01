@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 18:39:34 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 21:41:03 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ static void	handle_timeout(void)
 		(void)kill(node->pid, SIGUSR2);
 		if (ft_put_string(STDOUT_FILENO, "Timeout: ")
 			|| ft_put_number(STDOUT_FILENO, node->pid)
-			|| ft_put_string(STDOUT_FILENO, " (disconnecting...)\n"))
+			|| ft_put_string(STDOUT_FILENO, " (disconnecting...)\n\n"))
 			ft_exit(EXIT_FAILURE);
 		(void)ft_simple_map_static_pop(c()->sessions, (void *)&node->pid, NULL);
 		free(node->self->message);
