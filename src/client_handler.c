@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 15:58:21 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/05/31 16:13:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 18:28:45 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <signal.h>
+
+void	timeout_exit(int signal)
+{
+	(void)signal;
+	exit(EXIT_FAILURE);
+}
 
 static bool	process_length(t_context *context, bool *out_result, bool *mut_ack)
 {

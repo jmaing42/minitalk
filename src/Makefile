@@ -61,7 +61,7 @@ $(error Bad target)
 endif
 
 SUFFIX := .$(TARGET).$(PROFILE)$(if $(SANITIZER),.$(SANITIZER))
-CFLAGS += $(if $(SANITIZER),-fsanitize=$(SANITIZER),) -std=c99 -pedantic -MMD
+CFLAGS += $(if $(SANITIZER),-fsanitize=$(SANITIZER),) -std=c99 -pedantic -MMD -DNO_MOULINETTE
 LDFLAGS += $(if $(SANITIZER),-fsanitize=$(SANITIZER),)
 
 -include $(TMP_DIR)/$(SRCS:.c=$(SUFFIX).d)

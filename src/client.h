@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:36:19 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 04:16:21 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 18:28:59 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ typedef struct s_context
 	size_t			length_length;
 	size_t			sent;
 	uint_fast8_t	curr_length;
+	useconds_t		timeout;
 }	t_context;
 
 bool	handler(t_context *context, bool ack);
+void	timeout_exit(int signal);
 
 #endif
