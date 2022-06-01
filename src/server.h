@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 04:16:02 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 13:32:44 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <signal.h>
 
 # include "ft_simple_map.h"
+# include "ft_stringbuilder.h"
 
 typedef struct s_session_timeout_node
 {
@@ -31,10 +32,9 @@ typedef struct s_session
 {
 	size_t					length;
 	size_t					length_length;
-	size_t					received;
-	char					*message;
 	char					curr;
 	uint_fast8_t			curr_length;
+	t_stringbuilder			*message;
 	t_session_timeout_node	timeout_node;
 }	t_session;
 
@@ -43,6 +43,7 @@ typedef struct s_context
 	t_ft_simple_map_static	*sessions;
 	t_session_timeout_node	*head;
 	t_session_timeout_node	*tail;
+	size_t					buffer_size;
 	useconds_t				timeout;
 	volatile bool			woke_up;
 	volatile bool			busy;
@@ -53,6 +54,6 @@ void		handler(int signal, siginfo_t *info, void *context);
 void		handle_timeout(void);
 void		free_session(pid_t pid, t_session *session);
 t_session	*get_session(pid_t key);
-void		show_session(pid_t sender, const char *message, size_t length);
+void		show_session(pid_t sender, t_stringbuilder *message);
 
 #endif

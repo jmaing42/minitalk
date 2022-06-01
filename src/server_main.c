@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 04:00:15 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 13:34:49 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 #include "ft_cstring.h"
 #include "ft_exit.h"
 
-#define ENVP_TIMEOUT_START "TIMEOUT="
+#define ENVP_BUFFER_SIZE "BUFFER_SIZE="
+#define ENVP_TIMEOUT "TIMEOUT="
+#define DEFAULT_BUFFER_SIZE 1024
 #define DEFAULT_TIMEOUT 420420
 
 t_context	*c(void)
@@ -36,6 +38,7 @@ static void	init_context(char **environ)
 	c()->sessions = new_ft_simple_map_static(sizeof(pid_t));
 	if (!c()->sessions)
 		ft_exit(EXIT_FAILURE);
+	c()->buffer_size = DEFAULT_BUFFER_SIZE;
 	c()->timeout = DEFAULT_TIMEOUT;
 	c()->head = NULL;
 	c()->tail = NULL;
@@ -43,11 +46,10 @@ static void	init_context(char **environ)
 	environ--;
 	while (*++environ)
 	{
-		if (ft_cstring_starts_with(*environ, ENVP_TIMEOUT_START))
-		{
-			c()->timeout = ft_atoi(*environ + sizeof(ENVP_TIMEOUT_START) - 1);
-			break ;
-		}
+		if (ft_cstring_starts_with(*environ, ENVP_BUFFER_SIZE))
+			c()->buffer_size = ft_atoi(*environ + sizeof(ENVP_BUFFER_SIZE) - 1);
+		if (ft_cstring_starts_with(*environ, ENVP_TIMEOUT))
+			c()->timeout = ft_atoi(*environ + sizeof(ENVP_TIMEOUT) - 1);
 	}
 }
 

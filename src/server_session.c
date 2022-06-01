@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 03:43:05 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 03:50:29 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 13:35:59 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@
 #include "ft_malloc.h"
 #include "ft_exit.h"
 
-void	show_session(pid_t sender, const char *message, size_t length)
+void	show_session(pid_t sender, t_stringbuilder *message)
 {
+	char *const	str = stringbuilder_to_string(message, 0);
+
 	if (
-		ft_put_string(STDOUT_FILENO, "Message from ")
+		!str
+		|| ft_put_string(STDOUT_FILENO, "Message from ")
 		|| ft_put_number(STDOUT_FILENO, sender)
 		|| ft_put_string(STDOUT_FILENO, " (")
-		|| ft_put_number(STDOUT_FILENO, length)
+		|| ft_put_number(STDOUT_FILENO, message->length)
 		|| ft_put_string(STDOUT_FILENO, " bytes)\n|\t")
-		|| ft_put_multiline(STDOUT_FILENO, message, "|\t", 2)
+		|| ft_put_multiline(STDOUT_FILENO, str, "|\t", 2)
 		|| ft_put_string(STDOUT_FILENO, "\n\n")
 	)
 		ft_exit(EXIT_FAILURE);
+	free(str);
 }
 
 void	free_session(pid_t pid, t_session *session)
@@ -43,7 +47,8 @@ void	free_session(pid_t pid, t_session *session)
 		session->timeout_node.next->prev = session->timeout_node.prev;
 	else
 		c()->tail = session->timeout_node.prev;
-	free(session->message);
+	if (session->message)
+		stringbuilder_free(session->message);
 	free(session);
 }
 
@@ -55,7 +60,6 @@ t_session	*get_session(pid_t key)
 		return (session);
 	session = (t_session *)ft_malloc(sizeof(t_session));
 	session->message = NULL;
-	session->received = 0;
 	session->length = 0;
 	session->length_length = 0;
 	session->curr = 0;
