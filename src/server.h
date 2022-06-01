@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 13:32:44 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 18:39:06 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_context
 
 t_context	*c(void);
 void		handler(int signal, siginfo_t *info, void *context);
-void		handle_timeout(void);
+void		main_loop(void);
 void		free_session(pid_t pid, t_session *session);
 t_session	*get_session(pid_t key);
 void		show_session(pid_t sender, t_stringbuilder *message);

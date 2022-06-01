@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 13:30:41 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 18:39:34 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	handler(int signal, siginfo_t *info, void *context)
 	}
 }
 
-void	handle_timeout(void)
+static void	handle_timeout(void)
 {
 	t_session_timeout_node	*node;
 	t_session_timeout_node	*next;
@@ -133,4 +133,20 @@ void	handle_timeout(void)
 	}
 	c()->tail = NULL;
 	c()->busy = false;
+}
+
+void	main_loop(void)
+{
+	while (true)
+	{
+		c()->woke_up = false;
+		if (c()->head)
+		{
+			usleep(c()->timeout);
+			if (!c()->woke_up)
+				handle_timeout();
+		}
+		else
+			pause();
+	}
 }

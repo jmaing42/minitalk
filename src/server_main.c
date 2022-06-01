@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 02:24:27 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 13:34:49 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/01 18:40:48 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,26 @@ t_context	*c(void)
 	return (&context);
 }
 
-static void	init_context(char **environ)
+static void	set_signal_handler(void)
 {
+	struct sigaction	sa;
+
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_sigaction = handler;
+	sa.sa_flags = SA_SIGINFO;
+	if (
+		sigemptyset(&sa.sa_mask)
+		|| sigaction(SIGUSR1, &sa, NULL)
+		|| sigaction(SIGUSR2, &sa, NULL)
+	)
+		exit(EXIT_FAILURE);
+}
+
+static void	init(char **environ)
+{
+	ft_put_string(STDOUT_FILENO, "Server pid is ");
+	ft_put_number(STDOUT_FILENO, getpid());
+	ft_put_string(STDOUT_FILENO, ". enjoy!\n");
 	c()->sessions = new_ft_simple_map_static(sizeof(pid_t));
 	if (!c()->sessions)
 		ft_exit(EXIT_FAILURE);
@@ -51,48 +69,29 @@ static void	init_context(char **environ)
 		if (ft_cstring_starts_with(*environ, ENVP_TIMEOUT))
 			c()->timeout = ft_atoi(*environ + sizeof(ENVP_TIMEOUT) - 1);
 	}
+	set_signal_handler();
 }
 
-static void	set_signal_handler(void)
-{
-	struct sigaction	sa;
-
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_sigaction = handler;
-	sa.sa_flags = SA_SIGINFO;
-	if (
-		sigemptyset(&sa.sa_mask)
-		|| sigaction(SIGUSR1, &sa, NULL)
-		|| sigaction(SIGUSR2, &sa, NULL)
-	)
-		exit(EXIT_FAILURE);
-}
-
-static void	main_loop(void)
-{
-	while (true)
-	{
-		c()->woke_up = false;
-		if (c()->head)
-		{
-			usleep(c()->timeout);
-			if (!c()->woke_up)
-				handle_timeout();
-		}
-		else
-			pause();
-	}
-}
+#ifndef NO_MOULINETTE
 
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	ft_put_string(STDOUT_FILENO, "Server pid is ");
-	ft_put_number(STDOUT_FILENO, getpid());
-	ft_put_string(STDOUT_FILENO, ". enjoy!\n");
-	init_context(envp);
-	set_signal_handler();
+	init(envp);
 	main_loop();
 	return (EXIT_FAILURE);
 }
+
+#else
+
+extern char	**environ;
+
+int	main(void)
+{
+	init(environ);
+	main_loop();
+	return (EXIT_FAILURE);
+}
+
+#endif
