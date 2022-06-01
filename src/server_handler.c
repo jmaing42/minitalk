@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:23:37 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 21:41:03 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 02:05:51 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	handle_length(
 	session->length = (session->length << 1) | data;
 	if (session->length_length == sizeof(size_t) * CHAR_BIT)
 	{
-		session->message = new_stringbuilder(c()->buffer_size);
+		session->message = new_stringbuilder(c()->options.buffer_size);
 		if (!session->message)
 			ft_exit(EXIT_FAILURE);
 	}
@@ -142,7 +142,7 @@ void	main_loop(void)
 		c()->woke_up = false;
 		if (c()->head)
 		{
-			usleep(c()->timeout);
+			usleep(c()->options.timeout);
 			if (!c()->woke_up)
 				handle_timeout();
 		}

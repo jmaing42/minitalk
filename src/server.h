@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 18:39:06 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 02:25:52 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,23 @@ typedef struct s_session
 	t_session_timeout_node	timeout_node;
 }	t_session;
 
+typedef struct s_options
+{
+	const char	*message_format_header;
+	const char	*message_format_line;
+	const char	*message_format_footer;
+	const char	*message_format_timeout;
+	size_t		message_format_line_length;
+	size_t		buffer_size;
+	useconds_t	timeout;
+}	t_options;
+
 typedef struct s_context
 {
+	t_options				options;
 	t_ft_simple_map_static	*sessions;
 	t_session_timeout_node	*head;
 	t_session_timeout_node	*tail;
-	size_t					buffer_size;
-	useconds_t				timeout;
 	volatile bool			woke_up;
 	volatile bool			busy;
 }	t_context;
@@ -52,6 +62,7 @@ typedef struct s_context
 t_context	*c(void);
 void		handler(int signal, siginfo_t *info, void *context);
 void		main_loop(void);
+void		parse_options(char **environ);
 void		free_session(pid_t pid, t_session *session);
 t_session	*get_session(pid_t key);
 void		show_session(pid_t sender, t_stringbuilder *message);
