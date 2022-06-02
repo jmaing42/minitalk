@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:45 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 18:05:38 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 19:21:39 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ void	print_message(
 {
 	print_formatted(c()->options.message_format_header, sender, length);
 	if (
-		ft_put_multiline(
+		ft_write(
+			STDOUT_FILENO,
+			c()->options.message_format_line,
+			c()->options.message_format_line_length
+		)
+		|| ft_put_multiline(
 			STDOUT_FILENO,
 			message,
 			c()->options.message_format_line,
