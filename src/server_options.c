@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 01:50:00 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 02:28:50 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 18:03:48 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "ft_lib.h"
 #include "ft_cstring.h"
+#include "ft_malloc.h"
 
 #define ENVP_MESSAGE_FORMAT_HEADER "MESSAGE_FORMAT_HEADER="
 #define ENVP_MESSAGE_FORMAT_LINE "MESSAGE_FORMAT_LINE="
@@ -22,10 +23,10 @@
 #define ENVP_BUFFER_SIZE "BUFFER_SIZE="
 #define ENVP_TIMEOUT "TIMEOUT="
 
-#define DEFAULT_MESSAGE_FORMAT_HEADER "Message from %P (%L bytes)\n"
-#define DEFAULT_MESSAGE_FORMAT_LINE "|\t"
-#define DEFAULT_MESSAGE_FORMAT_FOOTER "\n"
-#define DEFAULT_MESSAGE_FORMAT_TIMEOUT "Timeout: %P (disconnecting...)\n\n"
+#define DEFAULT_MESSAGE_FORMAT_HEADER "Message from %P (%L bytes)%N"
+#define DEFAULT_MESSAGE_FORMAT_LINE "|%T"
+#define DEFAULT_MESSAGE_FORMAT_FOOTER "%N"
+#define DEFAULT_MESSAGE_FORMAT_TIMEOUT "Timeout: %P (disconnecting...)%N%N"
 #define DEFAULT_BUFFER_SIZE 1024
 #define DEFAULT_TIMEOUT 420420
 
@@ -33,6 +34,34 @@
 #define BUFFER_SIZE_MAX 16384
 #define TIMEOUT_MIN 100
 #define TIMEOUT_MAX 1000000
+
+static char	*line(const char *str)
+{
+	size_t		len;
+	const char	*tmp;
+	char		*result;
+
+	len = 0;
+	tmp = str - 1;
+	while (*++tmp)
+	{
+		if (tmp[0] == '%' && tmp[1] == 'T')
+			tmp++;
+		len++;
+	}
+	result = ft_malloc(len + 1);
+	result[len] = '\0';
+	len = 0;
+	tmp = str - 1;
+	while (*++tmp)
+	{
+		if (tmp[0] == '%' && tmp[1] == 'T')
+			result[len++] = *++tmp - 'T' + '\t';
+		else
+			result[len++] = *tmp;
+	}
+	return (result);
+}
 
 static uintmax_t	normalize(uintmax_t min, uintmax_t value, uintmax_t max)
 {
@@ -89,6 +118,7 @@ void	parse_options(char **environ)
 			(c()->options.timeout)
 				= normalize(TIMEOUT_MIN, ft_atoi(tmp), TIMEOUT_MAX);
 	}
+	c()->options.message_format_line = line(c()->options.message_format_line);
 	c()->options.message_format_line_length = ft_strlen(
 		c()->options.message_format_line);
 }

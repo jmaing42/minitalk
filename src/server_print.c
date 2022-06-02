@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:45 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 17:45:30 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 18:04:27 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static bool	print_formatted_conversion(char type, pid_t sender, size_t length)
 		return (false);
 	if (
 		(type == '%' && ft_write(STDOUT_FILENO, "%", 1))
+		|| (type == '_' && ft_write(STDOUT_FILENO, " ", 1))
+		|| (type == 'T' && ft_write(STDOUT_FILENO, "\t", 1))
+		|| (type == 'N' && ft_write(STDOUT_FILENO, "\n", 1))
 		|| (type == 'P' && ft_put_number(STDOUT_FILENO, sender))
 		|| (type == 'L' && ft_put_number(STDOUT_FILENO, length))
 	)
@@ -70,9 +73,5 @@ void	print_message(
 		)
 	)
 		ft_exit(EXIT_FAILURE);
-	if (ft_write(STDOUT_FILENO, "\n", 1))
-		ft_exit(EXIT_FAILURE);
 	print_formatted(c()->options.message_format_footer, sender, length);
-	if (ft_write(STDOUT_FILENO, "\n\n", 2))
-		ft_exit(EXIT_FAILURE);
 }
