@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 03:43:05 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/01 13:35:59 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 17:40:55 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,9 @@ void	show_session(pid_t sender, t_stringbuilder *message)
 {
 	char *const	str = stringbuilder_to_string(message, 0);
 
-	if (
-		!str
-		|| ft_put_string(STDOUT_FILENO, "Message from ")
-		|| ft_put_number(STDOUT_FILENO, sender)
-		|| ft_put_string(STDOUT_FILENO, " (")
-		|| ft_put_number(STDOUT_FILENO, message->length)
-		|| ft_put_string(STDOUT_FILENO, " bytes)\n|\t")
-		|| ft_put_multiline(STDOUT_FILENO, str, "|\t", 2)
-		|| ft_put_string(STDOUT_FILENO, "\n\n")
-	)
+	if (!str)
 		ft_exit(EXIT_FAILURE);
+	print_message(sender, message->length, str);
 	free(str);
 }
 
