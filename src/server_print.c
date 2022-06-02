@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:45 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 18:04:27 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 18:05:38 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	print_formatted(const char *format, pid_t sender, size_t length)
 
 	skipped = 0;
 	while (*format || skipped)
-{
+	{
 		if (*format && *format != '%')
 		{
 			skipped++;
