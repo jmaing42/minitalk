@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 01:50:00 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 18:03:48 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 20:07:21 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 #define DEFAULT_MESSAGE_FORMAT_HEADER "Message from %P (%L bytes)%N"
 #define DEFAULT_MESSAGE_FORMAT_LINE "|%T"
-#define DEFAULT_MESSAGE_FORMAT_FOOTER "%N"
+#define DEFAULT_MESSAGE_FORMAT_FOOTER "%N%N"
 #define DEFAULT_MESSAGE_FORMAT_TIMEOUT "Timeout: %P (disconnecting...)%N%N"
 #define DEFAULT_BUFFER_SIZE 1024
 #define DEFAULT_TIMEOUT 420420

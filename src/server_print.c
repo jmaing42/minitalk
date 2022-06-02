@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:45 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 19:21:39 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 20:11:51 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,11 @@ void	print_message(
 	)
 		ft_exit(EXIT_FAILURE);
 	print_formatted(c()->options.message_format_footer, sender, length);
+}
+
+void	print_timeout_message(
+	pid_t sender
+)
+{
+	print_formatted(c()->options.message_format_timeout, sender, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 17:18:39 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/06/02 20:12:02 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ void		free_session(pid_t pid, t_session *session);
 t_session	*get_session(pid_t key);
 void		show_session(pid_t sender, t_stringbuilder *message);
 void		print_message(pid_t sender, size_t length, char *message);
+void		print_timeout_message(pid_t sender);
 
 #endif
