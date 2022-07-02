@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 07:17:20 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 20:12:02 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/07/02 12:56:44 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_session_timeout_node
 typedef struct s_session
 {
 	size_t					length;
-	size_t					length_length;
+	uint_fast8_t			length_length;
 	char					curr;
 	uint_fast8_t			curr_length;
 	t_stringbuilder			*message;

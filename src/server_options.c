@@ -6,7 +6,7 @@
 /*   By: Juyeong Maing <jmaing@student.42seoul.kr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 01:50:00 by Juyeong Maing     #+#    #+#             */
-/*   Updated: 2022/06/02 20:07:21 by Juyeong Maing    ###   ########.fr       */
+/*   Updated: 2022/07/02 12:57:48 by Juyeong Maing    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*line(const char *str)
 			tmp++;
 		len++;
 	}
-	result = ft_malloc(len + 1);
+	result = (char *)ft_malloc(len + 1);
 	result[len] = '\0';
 	len = 0;
 	tmp = str - 1;
