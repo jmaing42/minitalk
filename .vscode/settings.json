@@ -1,5 +1,16 @@
 {
+  "files.exclude": {
+    ".vscode": true,
+    "**/.cache": true,
+    "**/*.{exe,dSYM}": true,
+    "**/compile_commands.json": true,
+    "**/*.part.json": true
+  },
   "files.associations": {
     "*.h": "c",
   },
+  "clangd.detectExtensionConflicts": false,
+  "C_Cpp.autocomplete": "Disabled",
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/compile_commands.json",
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json",
 }
