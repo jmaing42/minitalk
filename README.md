@@ -49,8 +49,8 @@ all options passed to the environment variable:
 
 ### Server options
 
-- `TIMEOUT`: ACK timeout in milliseconds
-- `BUFFER_SIZE`: ACK timeout in milliseconds
+- `TIMEOUT`: ACK timeout in microseconds
+- `BUFFER_SIZE`: ACK timeout in microseconds
 - `MESSAGE_FORMAT_HEADER`: message template for header
 - `MESSAGE_FORMAT_LINE`: message template for each line
 - `MESSAGE_FORMAT_FOOTER`: message template for footer
